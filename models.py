@@ -247,21 +247,26 @@ class Darknet(nn.Module):
         img_dim = x.shape[2]
         loss = 0
         layer_outputs, yolo_outputs = [], []
-        if(len(x.size())==4):
-            for i, (module_def, module) in enumerate(zip(self.module_defs, self.module_list)):
-                if module_def["type"] in ["convolutional", "upsample", "maxpool"]:
-                    print(len(x.size()))
+        for i, (module_def, module) in enumerate(zip(self.module_defs, self.module_list)):
+            if module_def["type"] in ["convolutional", "upsample", "maxpool"]:
+                print(len(x.size()))
+                if(len(x.size())==4):
                     x = module(x)
-                elif module_def["type"] == "route":
+            elif module_def["type"] == "route":
+                if(len(x.size())==4):
                     x = torch.cat([layer_outputs[int(layer_i)] for layer_i in module_def["layers"].split(",")], 1)
-                elif module_def["type"] == "shortcut":
+            elif module_def["type"] == "shortcut":
+                if(len(x.size())==4):
                     layer_i = int(module_def["from"])
                     x = layer_outputs[-1] + layer_outputs[layer_i]
-                elif module_def["type"] == "yolo":
+            elif module_def["type"] == "yolo":
+                if(len(x.size())==4):
                     x, layer_loss = module[0](x, targets, img_dim)
                     loss += layer_loss
                     yolo_outputs.append(x)
+            if(len(x.size())==4):
                 layer_outputs.append(x)
+        if(len(x.size())==4):
             yolo_outputs = to_cpu(torch.cat(yolo_outputs, 1))
             return yolo_outputs if targets is None else (loss, yolo_outputs)
 
