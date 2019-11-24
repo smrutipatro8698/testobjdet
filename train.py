@@ -103,8 +103,11 @@ if __name__ == "__main__":
             imgs = Variable(imgs.to(device))
             targets = Variable(targets.to(device), requires_grad=False)
 
-            loss, outputs = model(imgs, targets)
-            loss.backward()
+            try:
+                loss, outputs = model(imgs, targets)
+                loss.backward()
+            except Exception as e:
+                raise e
 
             if batches_done % opt.gradient_accumulations:
                 # Accumulates gradient before each step
