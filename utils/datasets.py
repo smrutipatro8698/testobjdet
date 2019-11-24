@@ -26,7 +26,7 @@ def pad_to_square(img, pad_value):
 
 
 def resize(image, size):
-    image = transfroms.Compose([transforms.RandomResizedCrop(416),transforms.ToTensor()])
+    image = transforms.Compose([transforms.RandomResizedCrop(416),transforms.ToTensor()])
     print(type(image))
     #image = F.interpolate(image.unsqueeze(0), size=size, mode="nearest").squeeze(0)
     return image
