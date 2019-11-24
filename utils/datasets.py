@@ -151,8 +151,7 @@ class ListDataset(Dataset):
             self.img_size = random.choice(range(self.min_size, self.max_size + 1, 32))
         # Resize images to input shape
         imgs = torch.stack([resize(img, self.img_size) for img in imgs])
-        print("After stacking",imgs.size())
-        print("Batch_count",self.batch_count)
+        print("image stack",imgs.shape())
         self.batch_count += 1
         return paths, imgs, targets
 
