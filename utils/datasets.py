@@ -86,7 +86,6 @@ class ListDataset(Dataset):
 
         # Extract image as PyTorch tensor
         img = transforms.ToTensor()(Image.open(img_path).convert('RGB'))
-        print("after rgb transform",img.size())
 
         # Handle images with less than three channels
         if len(img.shape) != 3:
@@ -98,7 +97,6 @@ class ListDataset(Dataset):
         h_factor, w_factor = (h, w) if self.normalized_labels else (1, 1)
         # Pad to square resolution
         img, pad = pad_to_square(img, 0)
-        print("after pad to square",img.size())
         _, padded_h, padded_w = img.shape
 
         # ---------
@@ -129,12 +127,10 @@ class ListDataset(Dataset):
             targets = torch.zeros((len(boxes), 6))
             targets[:, 1:] = boxes
 
-        print("before augment",img.size())
         # Apply augmentations
         if self.augment:
             if np.random.random() < 0.5:
                 img, targets = horisontal_flip(img, targets)
-        print("after augment",img.size())
 
         return img_path, img, targets
 
