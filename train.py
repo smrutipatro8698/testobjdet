@@ -102,6 +102,7 @@ if __name__ == "__main__":
             imgs = Variable(imgs.to(device))
             targets = Variable(targets.to(device), requires_grad=False)
 
+            print(imgs.size())
             loss, outputs = model(imgs, targets)
             loss.backward()
 
